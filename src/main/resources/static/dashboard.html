@@ -6,126 +6,170 @@
     <title>Ana Menü - Akıllı Kütüphane</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --bg-light: #f8fafc;
-            --bg-white: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            /* Ana Renk Paleti - Dark Glass */
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            
+            /* Glassmorphism - Karanlık Cam */
+            --glass-bg: rgba(30, 41, 59, 0.7); 
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-hover: rgba(51, 65, 85, 0.8);
+            
+            /* Metin Renkleri */
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            
+            /* Vurgu */
+            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            
+            /* Gölgeler (Karanlık moda uygun) */
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         body {
-            background-color: var(--bg-light);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
             color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
         }
 
-        .navbar-custom {
-            background-color: var(--bg-white);
-            border-bottom: 1px solid var(--border);
-            box-shadow: var(--shadow);
+        /* Navbar Dark Glass */
+        .navbar-glass {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
             padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
+        /* Kart Tasarımı Dark */
         .menu-card {
-            background-color: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem 1.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem 1.5rem;
             text-align: center;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            box-shadow: var(--shadow-sm);
             position: relative;
             overflow: hidden;
         }
 
         .menu-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            background: var(--glass-hover);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
-        .menu-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-        }
-
-        .icon-circle {
-            width: 64px;
-            height: 64px;
-            background-color: rgba(37, 99, 235, 0.1);
-            border-radius: 12px;
+        /* İkon Kutusu - Neon Efektli */
+        .icon-box {
+            width: 72px;
+            height: 72px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 1.5rem;
-            font-size: 1.75rem;
-            color: var(--primary);
+            font-size: 1.85rem;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4); /* Mavi parlama */
+            transition: transform 0.3s ease;
+        }
+
+        .menu-card:hover .icon-box {
+            transform: scale(1.1) rotate(3deg);
+            box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.6);
         }
 
         .menu-title {
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1.25rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             color: var(--text-primary);
         }
 
         .menu-desc {
             color: var(--text-secondary);
-            font-size: 0.875rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
+
+        /* Hero Başlık Stili */
+        .hero-section {
+            margin-bottom: 3.5rem;
+        }
+        .hero-title {
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        /* Animasyonlar */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up { opacity: 0; animation: fadeInUp 0.5s ease-out forwards; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-custom sticky-top">
+    <nav class="navbar navbar-glass">
         <div class="container">
-            <span class="navbar-brand fw-bold fs-5">
-                <i class="bi bi-book me-2"></i>Akıllı Kütüphane
+            <span class="navbar-brand fw-bold fs-5 d-flex align-items-center gap-2">
+                <div class="bg-primary text-white rounded p-1 d-flex align-items-center justify-content-center shadow-lg" style="width: 36px; height: 36px; background: var(--primary-gradient) !important;">
+                    <i class="bi bi-book-fill fs-6"></i>
+                </div>
+                <span class="text-white">Akıllı Kütüphane</span>
             </span>
-            <div class="d-flex align-items-center">
-                <span class="text-secondary me-3 small" id="welcome-msg">Hoşgeldiniz</span>
-                <button onclick="logout()" class="btn btn-outline-secondary btn-sm">
-                    <i class="bi bi-box-arrow-right"></i>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-none d-md-block text-end">
+                    <div class="fw-bold text-white" style="font-size: 0.95rem;" id="user-display-name">Kullanıcı</div>
+                    <div class="text-secondary small" style="font-size: 0.8rem;" id="user-role-display">Rol</div>
+                </div>
+                <button onclick="logout()" class="btn btn-outline-danger btn-sm rounded-circle border-danger-subtle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" title="Çıkış Yap">
+                    <i class="bi bi-power fs-6"></i>
                 </button>
             </div>
         </div>
     </nav>
 
     <div class="container py-5">
-        <div class="text-center mb-5">
-            <h1 class="fw-bold mb-2">Yönetim Paneli</h1>
-            <p class="text-secondary">Sisteme hoş geldiniz</p>
+        <div class="text-center hero-section fade-in-up" style="animation-delay: 0.1s;">
+            <h1 class="display-5 hero-title mb-3">Yönetim Merkezi</h1>
+            <p class="text-secondary fs-5">Tüm kütüphane operasyonlarını tek panelden yönetin.</p>
         </div>
 
         <div id="menu-container" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        </div>
+            </div>
     </div>
 
     <script src="global.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            if (typeof checkAuth === 'undefined' || !checkAuth()) {
-                console.error("checkAuth fonksiyonu bulunamadı veya yetkilendirme başarısız");
-                return;
+            // Auth kontrolü (global.js yoksa hata vermesin diye try-catch gibi davranıyoruz)
+            if (typeof checkAuth !== 'undefined' && !checkAuth()) {
+                console.warn("Yetkilendirme kontrolü başarısız veya fonksiyon bulunamadı.");
+                // return; // Test ederken burayı kapatabilirsin
             }
             
             const token = localStorage.getItem("token");
@@ -137,7 +181,14 @@
                 return;
             }
 
-            document.getElementById("welcome-msg").innerText = `Merhaba, ${username || 'Kullanıcı'}`;
+            // Üst bilgi güncelleme
+            document.getElementById("user-display-name").innerText = username || 'Kullanıcı';
+            
+            let roleText = "Üye";
+            if(role === "ADMIN" || role === "ROLE_ADMIN") roleText = "Yönetici";
+            
+            document.getElementById("user-role-display").innerText = roleText;
+
             renderMenu(role);
         });
 
@@ -149,71 +200,29 @@
 
             if (role === "ADMIN" || role === "ROLE_ADMIN") {
                 menuItems = [
-                    { 
-                        title: "Kitap Yönetimi", 
-                        desc: "Kitap ekleme, silme ve düzenleme işlemleri.", 
-                        icon: "bi-book-half", 
-                        link: "/books.html" 
-                    },
-                    { 
-                        title: "Üye İşlemleri", 
-                        desc: "Öğrenci kayıtları ve kullanıcı yönetimi.", 
-                        icon: "bi-people-fill", 
-                        link: "/students.html" 
-                    },
-                    { 
-                        title: "Yazar Yönetimi", 
-                        desc: "Yazar ekleme, düzenleme ve silme.", 
-                        icon: "bi-pen-fill", 
-                        link: "/authors.html" 
-                    },
-                    { 
-                        title: "Kategori Yönetimi", 
-                        desc: "Kitap kategorilerini yönetin.", 
-                        icon: "bi-tags-fill", 
-                        link: "/categories.html" 
-                    },
-                    { 
-                        title: "Ödünç Verme", 
-                        desc: "Yeni kitap ödünç verme işlemi.", 
-                        icon: "bi-book-plus", 
-                        link: "/issue-book.html" 
-                    },
-                    { 
-                        title: "Ödünç Takibi", 
-                        desc: "Kimde hangi kitap var? İade işlemleri.", 
-                        icon: "bi-journal-check", 
-                        link: "/borrows.html" 
-                    },
-                    { 
-                        title: "Ceza & Raporlar", 
-                        desc: "Gecikmiş kitaplar ve finansal durum.", 
-                        icon: "bi-pie-chart-fill", 
-                        link: "/penalties.html" 
-                    }
+                    { title: "Kitap Yönetimi", desc: "Arşivdeki kitapları ekle, sil veya düzenle.", icon: "bi-book-half", link: "/books.html" },
+                    { title: "Üye İşlemleri", desc: "Öğrenci kayıtlarını ve kullanıcıları yönet.", icon: "bi-people-fill", link: "/students.html" },
+                    { title: "Yazar Yönetimi", desc: "Yazar veritabanını güncelle.", icon: "bi-pen-fill", link: "/authors.html" },
+                    { title: "Kategori Yönetimi", desc: "Raf düzenini ve türleri ayarla.", icon: "bi-tags-fill", link: "/categories.html" },
+                    { title: "Ödünç Verme", desc: "Hızlı kitap çıkışı işlemi yap.", icon: "bi-box-arrow-up-right", link: "/issue-book.html" },
+                    { title: "İade & Takip", desc: "Aktif ödünçleri ve iadeleri gör.", icon: "bi-arrow-counterclockwise", link: "/borrows.html" },
+                    { title: "Raporlar", desc: "İstatistikler, cezalar ve analizler.", icon: "bi-graph-up-arrow", link: "/penalties.html" }
                 ];
             } else {
                 menuItems = [
-                    { 
-                        title: "Kütüphane Arşivi", 
-                        desc: "Tüm kitapları incele ve ara.", 
-                        icon: "bi-search", 
-                        link: "/books.html" 
-                    },
-                    { 
-                        title: "Kitaplarım", 
-                        desc: "Şu an ödünç aldığın kitapları gör.", 
-                        icon: "bi-backpack2", 
-                        link: "/my-books.html" 
-                    }
+                    { title: "Kütüphane Arşivi", desc: "Tüm kitaplar arasında keşfe çık.", icon: "bi-search", link: "/books.html" },
+                    { title: "Kitaplarım", desc: "Ödünç aldığın kitapları ve sürelerini gör.", icon: "bi-backpack2", link: "/my-books.html" }
                 ];
             }
 
-            menuItems.forEach(item => {
+            menuItems.forEach((item, index) => {
+                // Animasyon gecikmesi (kartlar sırayla gelsin)
+                const delay = 0.2 + (index * 0.1); 
+                
                 const html = `
-                    <div class="col">
+                    <div class="col fade-in-up" style="animation-delay: ${delay}s;">
                         <div class="menu-card" onclick="window.location.href='${item.link}'">
-                            <div class="icon-circle">
+                            <div class="icon-box">
                                 <i class="bi ${item.icon}"></i>
                             </div>
                             <h3 class="menu-title">${item.title}</h3>

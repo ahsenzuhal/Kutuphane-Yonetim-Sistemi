@@ -1,6 +1,8 @@
 package com.kutuphane.AkilliKutuphane.service;
 
 import com.kutuphane.AkilliKutuphane.*;
+import com.kutuphane.AkilliKutuphane.model.Kitap;
+import com.kutuphane.AkilliKutuphane.model.Ogrenci;
 import com.kutuphane.AkilliKutuphane.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

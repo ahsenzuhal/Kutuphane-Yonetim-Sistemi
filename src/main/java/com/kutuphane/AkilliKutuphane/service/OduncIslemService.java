@@ -1,9 +1,9 @@
 package com.kutuphane.AkilliKutuphane.service;
 
-import com.kutuphane.AkilliKutuphane.Ceza;
-import com.kutuphane.AkilliKutuphane.Kitap;
-import com.kutuphane.AkilliKutuphane.OduncIslem;
-import com.kutuphane.AkilliKutuphane.Ogrenci;
+import com.kutuphane.AkilliKutuphane.model.Ceza;
+import com.kutuphane.AkilliKutuphane.model.Kitap;
+import com.kutuphane.AkilliKutuphane.model.OduncIslem;
+import com.kutuphane.AkilliKutuphane.model.Ogrenci;
 import com.kutuphane.AkilliKutuphane.repository.CezaRepository;
 import com.kutuphane.AkilliKutuphane.repository.KitapRepository;
 import com.kutuphane.AkilliKutuphane.repository.OduncIslemRepository;
@@ -39,6 +39,7 @@ public class OduncIslemService {
 
     /**
      * KİTAP ÖDÜNÇ VERME
+     * Hem kitap durumunu günceller hem de işlem kaydı açar.
      */
     @Transactional
     public void oduncVer(Long kitapId, Integer ogrenciId) {
@@ -47,7 +48,7 @@ public class OduncIslemService {
                 .orElseThrow(() -> new RuntimeException("Kitap bulunamadı ID: " + kitapId));
 
         if (!"Rafta".equalsIgnoreCase(kitap.getDurum())) {
-            throw new RuntimeException("Bu kitap şu an müsait değil! Durumu: " + kitap.getDurum());
+            throw new RuntimeException("Bu kitap şu an müsait değil! Mevcut Durumu: " + kitap.getDurum());
         }
 
         Ogrenci ogrenci = ogrenciRepository.findById(ogrenciId)
@@ -57,24 +58,24 @@ public class OduncIslemService {
         LocalDate bugun = LocalDate.now();
         LocalDate planlananTarih = bugun.plusDays(STANDART_IADE_SURESI);
 
-        // 3. Kitabı Güncelle
+        // 3. Kitap Tablosunu Güncelle (SQL'de görünmesi için)
         kitap.setDurum("Ödünç Verildi");
         kitap.setOduncAlanOgrenci(ogrenci);
         kitap.setOduncTarihi(bugun);
         kitap.setIadeTarihi(planlananTarih);
         kitapRepository.save(kitap);
 
-        // 4. İşlem Kaydı Oluştur
+        // 4. OduncIslem Tablosunda Kayıt Oluştur (Listede görünmesi için)
         OduncIslem islem = new OduncIslem();
         islem.setKitap(kitap);
         islem.setOgrenci(ogrenci);
         islem.setAlisTarihi(bugun);
         islem.setPlanlananIadeTarihi(planlananTarih);
-        islem.setDurum("Aktif"); // <--- SQL HATASINI ÇÖZEN SATIR
+        islem.setDurum("Aktif"); 
         
         oduncIslemRepository.save(islem);
         
-        System.out.println("✅ Kitap verildi: " + kitap.getKitapAdi());
+        System.out.println("✅ Ödünç kaydı her iki tabloda da oluşturuldu: " + kitap.getKitapAdi());
     }
 
     /**
@@ -82,7 +83,7 @@ public class OduncIslemService {
      */
     @Transactional
     public void iadeAl(Long kitapId) {
-        // 1. Kitabı Bul ve Rafa Kaldır
+        // 1. Kitabı Bul ve Bilgilerini Temizle (SQL'de NULL yapar)
         Kitap kitap = kitapRepository.findById(kitapId)
                 .orElseThrow(() -> new RuntimeException("Kitap bulunamadı"));
         
@@ -92,11 +93,9 @@ public class OduncIslemService {
         kitap.setIadeTarihi(null);
         kitapRepository.save(kitap);
 
-        // 2. Aktif İşlem Kaydını Bul
-        // Burada repository metodunu manuel filtreliyoruz ki hata çıkmasın
-        OduncIslem islem = oduncIslemRepository.findAll().stream()
-                .filter(k -> k.getKitap().getId().equals(kitapId) && k.getGercekIadeTarihi() == null)
-                .findFirst()
+        // 2. Aktif İşlem Kaydını Bul (Daha performanslı findBy metodu ile)
+        // Eğer iadeAl butonuna basınca SQL değişmiyorsa, muhtemelen bu satır hata verip işlemi geri alıyordur (Rollback).
+        OduncIslem islem = oduncIslemRepository.findByKitapIdAndDurum(kitapId, "Aktif")
                 .orElseThrow(() -> new RuntimeException("Bu kitap için aktif ödünç kaydı bulunamadı!"));
 
         // 3. İşlemi Kapat
@@ -104,32 +103,25 @@ public class OduncIslemService {
         islem.setDurum("İade Edildi");
         oduncIslemRepository.save(islem);
 
-        // 4. CEZA HESAPLAMA (GARANTİ YÖNTEM)
+        // 4. Ceza Hesaplama
         long gecikmeGun = ChronoUnit.DAYS.between(islem.getPlanlananIadeTarihi(), LocalDate.now());
-
         if (gecikmeGun > 0) {
             double cezaTutari = gecikmeGun * GECIKME_CEZA_KATSAYISI;
-            
             Ceza ceza = new Ceza();
             ceza.setOgrenci(islem.getOgrenci());
             ceza.setKitap(kitap);
             ceza.setCezaMiktari(cezaTutari);
             ceza.setOdemeDurumu("Ödenmedi");
-            
-            cezaRepository.save(ceza); // Cezayı veritabanına çakıyoruz
-            
-            System.out.println("⚠️ GECİKME CEZASI KESİLDİ: " + cezaTutari + " TL");
-            
-            // Mail gönderme kodu buraya eklenebilir (try-catch içinde)
+            cezaRepository.save(ceza);
+            System.out.println("⚠️ Ceza kaydedildi: " + cezaTutari + " TL");
         }
+        System.out.println("🔄 İade başarılı, tablolar güncellendi: " + kitap.getKitapAdi());
     }
 
     // --- YARDIMCI METODLAR (Frontend İçin) ---
 
     public List<OduncIslem> tumAktifOduncIslemleri() {
-        // Sadece 'Aktif' olanları veya iade tarihi null olanları döndür
-        return oduncIslemRepository.findAll().stream()
-                .filter(islem -> islem.getGercekIadeTarihi() == null)
-                .toList();
-    }
+    // Repository içindeki hazır metodu kullanmak daha performanslıdır
+    return oduncIslemRepository.findByDurum("Aktif"); 
+}
 }

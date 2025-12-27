@@ -5,113 +5,218 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giriş Yap - Akıllı Kütüphane</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --bg-light: #f8fafc;
-            --bg-white: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            /* Ana Renk Paleti - Deep Slate */
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            
+            /* Metin */
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            
+            /* Vurgu */
+            --primary-accent: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            
+            /* Gölgeler */
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-gradient);
             height: 100vh;
             margin: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-primary);
         }
 
+        /* Giriş Kartı */
         .login-card {
-            background-color: var(--bg-white);
-            padding: 2.5rem;
-            border-radius: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 3rem 2.5rem;
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
             box-shadow: var(--shadow-lg);
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Arka plan süslemesi (glow) */
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: var(--primary-accent);
+            filter: blur(80px);
+            opacity: 0.2;
+            border-radius: 50%;
+            z-index: -1;
         }
 
         .login-title {
             color: var(--text-primary);
-            font-weight: 700;
-            margin-bottom: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
             text-align: center;
             font-size: 1.75rem;
+            letter-spacing: -0.5px;
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-            font-weight: 500;
-            padding: 0.75rem;
+        .login-subtitle {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
         }
 
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
+        /* Input Alanları */
+        .form-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
         }
 
         .form-control {
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 0.75rem;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
         }
 
         .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background-color: rgba(15, 23, 42, 0.9);
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
             outline: none;
+            color: white;
         }
 
-        .form-label {
-            font-weight: 500;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
+        .form-control::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        /* Buton */
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            font-weight: 600;
+            padding: 0.9rem;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Hata Mesajı */
+        .alert-danger {
+            background-color: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        /* İkon Kutusu (Logo) */
+        .logo-box {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.75rem;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+        }
+        
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            opacity: 0.7;
         }
     </style>
 </head>
 <body>
 
     <div class="login-card">
-        <h2 class="login-title">Kütüphane Sistemi</h2>
-        <p class="text-center text-secondary mb-4">Lütfen hesabınıza giriş yapın</p>
+        <div class="logo-box">
+            <i class="bi bi-book-fill"></i>
+        </div>
+
+        <h2 class="login-title">Hoş Geldiniz</h2>
+        <p class="login-subtitle">Akıllı Kütüphane Yönetim Paneli</p>
         
         <form onsubmit="event.preventDefault(); login();">
             <div class="mb-3">
                 <label for="username" class="form-label">Kullanıcı Adı</label>
-                <input type="text" class="form-control" id="username" placeholder="Kullanıcı adınızı girin" required>
+                <input type="text" class="form-control" id="username" placeholder="ör: admin" required autocomplete="username">
             </div>
             <div class="mb-4">
                 <label for="password" class="form-label">Şifre</label>
-                <input type="password" class="form-control" id="password" placeholder="Şifrenizi girin" required>
+                <input type="password" class="form-control" id="password" placeholder="••••••••" required autocomplete="current-password">
             </div>
             <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
         </form>
+
+        <div class="text-center mt-3">
+            <span class="text-secondary small">Hesabın yok mu?</span>
+            <a href="/register.html" class="text-decoration-none fw-bold" style="color: var(--primary-accent);">Kayıt Ol</a>
+        </div>
         
-        <div id="error-msg" class="alert alert-danger mt-3 d-none text-center"></div>
+        <div id="error-msg" class="alert alert-danger mt-4 d-none text-center" role="alert"></div>
         
         <div class="text-center mt-4">
-            <small class="text-secondary">Akıllı Kütüphane Yönetim Paneli &copy; 2025</small>
+            <small class="copyright">&copy; 2025 Akıllı Kütüphane Sistemi</small>
         </div>
     </div>
 
+    <script src="global.js"></script>
     <script>
         async function login() {
             const kulAdi = document.getElementById("username").value;
             const sifre = document.getElementById("password").value;
             const errorDiv = document.getElementById("error-msg");
+            const btn = document.querySelector("button[type='submit']");
 
+            // Reset UI
             errorDiv.classList.add("d-none");
             errorDiv.innerText = "";
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Giriş Yapılıyor...';
 
             try {
                 const response = await fetch("/auth/login", {
@@ -129,11 +234,15 @@
                 } else {
                     errorDiv.innerText = "Giriş başarısız! Kullanıcı adı veya şifre yanlış.";
                     errorDiv.classList.remove("d-none");
+                    btn.disabled = false;
+                    btn.innerText = 'Giriş Yap';
                 }
             } catch (err) {
                 console.error(err);
-                errorDiv.innerText = "Sunucuya bağlanılamadı!";
+                errorDiv.innerText = "Sunucuya bağlanılamadı! Lütfen internet bağlantınızı kontrol edin.";
                 errorDiv.classList.remove("d-none");
+                btn.disabled = false;
+                btn.innerText = 'Giriş Yap';
             }
         }
     </script>

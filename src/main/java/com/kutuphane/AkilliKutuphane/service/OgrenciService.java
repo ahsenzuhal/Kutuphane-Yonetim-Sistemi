@@ -1,6 +1,6 @@
 package com.kutuphane.AkilliKutuphane.service;
 
-import com.kutuphane.AkilliKutuphane.Ogrenci;
+import com.kutuphane.AkilliKutuphane.model.Ogrenci;
 import com.kutuphane.AkilliKutuphane.repository.OgrenciRepository;
 import org.springframework.stereotype.Service;
 

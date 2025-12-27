@@ -1,8 +1,10 @@
 package com.kutuphane.AkilliKutuphane.repository;
 
-import com.kutuphane.AkilliKutuphane.Kullanici;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.kutuphane.AkilliKutuphane.model.Kullanici;
+
 import java.util.Optional;
 
 @Repository

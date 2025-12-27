@@ -1,8 +1,8 @@
 package com.kutuphane.AkilliKutuphane.service;
 
-import com.kutuphane.AkilliKutuphane.Ceza;
-import com.kutuphane.AkilliKutuphane.Kitap;
-import com.kutuphane.AkilliKutuphane.Ogrenci;
+import com.kutuphane.AkilliKutuphane.model.Ceza;
+import com.kutuphane.AkilliKutuphane.model.Kitap;
+import com.kutuphane.AkilliKutuphane.model.Ogrenci;
 import com.kutuphane.AkilliKutuphane.repository.CezaRepository;
 import org.springframework.stereotype.Service;
 

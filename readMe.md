@@ -24,130 +24,185 @@ Spring Boot backend ve Vanilla JavaScript frontend ile geliştirilmiştir.
 - ✅ JWT tabanlı kimlik doğrulama ve yetkilendirme
 - ✅ Rol tabanlı erişim kontrolü (ADMIN/USER)
 - ✅ Ödünç alma/iade işlem takibi (OduncIslem Entity)
-- ✅ Otomatik ceza hesaplama (gecikme başına günlük 10 TL)
-- ✅ E-posta bildirim sistemi (gecikme uyarıları)
-- ✅ Global Exception Handling
-- ✅ RESTful API tasarımı
-- ✅ DTO Pattern kullanımı
-- ✅ Service Layer mimarisi
+# Akıllı Kütüphane — Yapılan Değişiklikler ve Kurulum
 
-### Frontend Özellikleri
-- ✅ Responsive tasarım (Mobil uyumlu)
-- ✅ Arama ve filtreleme özellikleri
-- ✅ Gerçek zamanlı veri güncellemeleri
-- ✅ Kullanıcı dostu arayüz
+Bu depo üzerinde kayıt (register) akışını iyileştirdim ve frontend kayıt sayfasını modern, erişilebilir bir tasıma güncelledim. Aşağıda yapılan değişiklikler, nasıl derleyip çalıştıracağınız, potansiyel veritabanı değişiklikleri ve test adımları yer alır.
 
-##  Teknolojiler
+## Özet (Kısa)
+- Sunucu tarafında `RegisterRequest` DTO'su genişletildi (isim, email, doğrulama anotasyonları).
+- `Kullanici` (model) sınıfına `isim` ve `email` alanları eklendi (email için `unique=true`).
+- `/auth/register` endpoint'i `@Valid` ile doğrulama yapar; alan bazlı hata yanıtları döner; duplicate kullanıcı adı için 409 döndürülür.
+- `register.html` güncellendi: modern tasarım, inline doğrulamalar, şifre güç göstergesi ve şifre onayı eklendi.
 
-### Backend
-- **Framework:** Spring Boot 3.5.7
-- **Java Version:** Java 21
-- **Veritabanı:** MySQL 8.0+
-- **Güvenlik:** Spring Security + JWT
-- **ORM:** Spring Data JPA / Hibernate
-- **Build Tool:** Maven
-- **Mail:** JavaMailSender
+## Değiştirilen Dosyalar
+- [src/main/java/com/kutuphane/AkilliKutuphane/dto/RegisterRequest.java](src/main/java/com/kutuphane/AkilliKutuphane/dto/RegisterRequest.java)
+- [src/main/java/com/kutuphane/AkilliKutuphane/model/Kullanici.java](src/main/java/com/kutuphane/AkilliKutuphane/model/Kullanici.java)
+- [src/main/java/com/kutuphane/AkilliKutuphane/controller/AuthController.java](src/main/java/com/kutuphane/AkilliKutuphane/controller/AuthController.java)
+- [src/main/resources/static/register.html](src/main/resources/static/register.html)
 
-### Frontend
-- **HTML5** - Yapısal markup
-- **CSS3** - Modern styling (Dark Academia Theme)
-- **Bootstrap 5** - Responsive framework
-- **Vanilla JavaScript** - İstemci tarafı mantık
-- **Fetch API** - HTTP istekleri
-- **Bootstrap Icons** - İkon seti
+### Adım Adım Yapılanlar
+1. İnceleme: `AuthController`, `KullaniciService`, `RegisterRequest`, `Kullanici`, ve `register.html` incelendi; DTO ve frontend alan uyuşmazlıkları belirlendi.
+2. DTO genişletme: `RegisterRequest` içine `isim`, `email` eklendi ve Jakarta Validation anotasyonları (`@NotBlank`, `@Email`, `@Size`) kullanıldı.
+3. Model güncelleme: `Kullanici`'ya `isim` ve `email` eklendi; `email` için `unique=true` konuldu. (Not: mevcut veritabanı şemasına migration gerekebilir.)
+4. Controller güncelleme: `/auth/register` endpoint'i artık `@Valid` ile doğruluyor, `BindingResult` ile alan hatalarını JSON olarak döndürüyor, duplicate kullanıcı adı için 409 dönüyor ve kayıt sırasında isim/email kaydediliyor.
+5. Frontend güncelleme: Kayıt formuna `passwordConfirm`, parola güç göstergesi, inline hata alanları ve daha iyi yükleme/başarı/başarısızlık geri bildirimleri eklendi.
 
-##  Kurulum
+## Bilinen Durumlar / Çözülmesi Gerekenler
+- Bu ortamda Maven build çalıştırılamadı: `JAVA_HOME` ortam değişkeni tanımlı değil. Bu nedenle ben tüm derleme hatalarını doğrudan çalıştırarak doğrulayamadım. Aşağıda nasıl derleyeceğinize dair adımlar var.
+- `Kullanici` modeline eklenen `email` için `unique=true` eklendi; mevcut veritabanında bu sütun yoksa migration (DDL) gerekiyor. Aksi takdirde uygulama çalışırken tablo/sütun bulunamaması veya constraint hatası alabilirsiniz.
 
-### Gereksinimler
-- Java 21 veya üzeri
-- Maven 3.6+
-- MySQL 8.0+
-- Git
+## Derleme ve Çalıştırma (Windows)
+1. Java 21 veya uyumlu JDK kurulu olduğundan emin olun ve `JAVA_HOME` ayarlayın.
+    PowerShell örneği:
+```powershell
+setx JAVA_HOME "C:\\Program Files\\Java\\jdk-21" -m
+# Yeni terminal açın
+```
+2. Proje kökünde (version4) Maven Wrapper ile derleyin. Geliştirme amacıyla MySQL kurulu değilse `dev` profili ile H2 in-memory veritabanı kullanabilirsiniz:
+```powershell
+cd "c:\\Users\\batma\\OneDrive - Karadeniz Teknik Üniversitesi\\Masaüstü\\ahsen\\version4"
+.\\mvnw.cmd clean package -DskipTests=true
 
-### Adım 1: Projeyi Klonlayın
-```bash
-git clone <repository-url>
-cd version3
+-- `dev` profili ile çalıştırma (H2 kullanılacak):
+
+```powershell
+.\\mvnw.cmd -Dspring-boot.run.profiles=dev spring-boot:run
+```
+```
+3. Uygulamayı çalıştırın:
+```powershell
+.\\mvnw.cmd spring-boot:run
 ```
 
-### Adım 2: Veritabanını Oluşturun
-MySQL'de veritabanı oluşturun:
+## Veritabanı Migration (Hızlı SQL örneği)
+Eğer `kullanicilar` tablonuzda `isim` ve `email` alanları yoksa aşağıdaki SQL ile ekleyebilirsiniz (MySQL örneği):
+
 ```sql
-CREATE DATABASE KutuphaneSistemi;
+ALTER TABLE kullanicilar
+   ADD COLUMN isim VARCHAR(100),
+   ADD COLUMN email VARCHAR(255);
+
+-- Email için unique constraint ekleme (önce duplicate kayıtları temizleyin)
+ALTER TABLE kullanicilar
+   ADD CONSTRAINT uq_kullanici_email UNIQUE (email);
 ```
 
-### Adım 3: Yapılandırma
-`src/main/resources/application.properties` dosyasını düzenleyin:
-
-```properties
-# Veritabanı Ayarları
-spring.datasource.url=jdbc:mysql://localhost:3306/KutuphaneSistemi
-spring.datasource.username=kutuphane_user
-spring.datasource.password=your_password
-
-# JWT Ayarları
-security.jwt.secret=SuPerGucluUzunBirTokenAnahtari2025!@#ABCxyz123
-security.jwt.expiration=3600000
-
-# Mail Ayarları (Opsiyonel)
-spring.mail.host=smtp.hotmail.com
-spring.mail.port=587
-spring.mail.username=your_email@hotmail.com
-spring.mail.password=your_password
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
-```
-
-### Adım 4: Projeyi Derleyin ve Çalıştırın
+## API Test Örneği (curl)
 ```bash
-# Projeyi derle
-mvn clean install
+curl -X POST http://localhost:9090/auth/register \
+   -H 'Content-Type: application/json' \
+   -d '{"isim":"Ahmet Deniz","kullaniciAdi":"ahmet","email":"ahmet@example.com","sifre":"P4ssw0rd","rol":"USER"}'
+```
+Başarılıysa `AuthResponse` (token, kullanıcı adı, rol) dönecektir. Hatalı isteklerde alan hataları JSON gövdesiyle dönecektir.
 
-# Uygulamayı çalıştır
-mvn spring-boot:run
+## Sonraki Adımlar (Öneriler)
+- Uçtan uca test: Build + run + kayıt testi ve hata inceleme.
+- E-posta doğrulama (activation link) eklenmesi.
+- Rate-limiting veya CAPTCHA ile bot koruması.
+- Eğer isterseniz Flyway/Liquibase migration script'leri hazırlayıp ekleyebilirim.
+
+# Akıllı Kütüphane Yönetim Sistemi
+
+Spring Boot backend ve Vanilla JavaScript frontend ile geliştirilmiştir.
+
+<img width="1915" height="948" alt="image" src="https://github.com/user-attachments/assets/e5303276-8323-4e2a-98a6-1440e67e7b46" />
+
+
+
+## İçindekiler
+
+- [Özellikler](#özellikler)
+- [Teknolojiler](#teknolojiler)
+- [Kurulum](#kurulum)
+- [Proje Yapısı](#proje-yapısı)
+- [API Dokümantasyonu](#api-dokümantasyonu)
+- [Frontend Sayfaları](#frontend-sayfaları)
+- [Güvenlik](#güvenlik)
+- [Veritabanı Şeması](#veritabanı-şeması)
+- [Kullanım Kılavuzu](#kullanım-kılavuzu)
+
+##  Özellikler
+
+### Backend Özellikleri
+- ✅ JWT tabanlı kimlik doğrulama ve yetkilendirme
+- ✅ Rol tabanlı erişim kontrolü (ADMIN/USER)
+- ✅ Ödünç alma/iade işlem takibi (OduncIslem Entity)
+# Akıllı Kütüphane — Yapılan Değişiklikler ve Kurulum
+
+Bu depo üzerinde kayıt (register) akışını iyileştirdim ve frontend kayıt sayfasını modern, erişilebilir bir tasıma güncelledim. Aşağıda yapılan değişiklikler, nasıl derleyip çalıştıracağınız, potansiyel veritabanı değişiklikleri ve test adımları yer alır.
+
+## Özet (Kısa)
+- Sunucu tarafında `RegisterRequest` DTO'su genişletildi (isim, email, doğrulama anotasyonları).
+- `Kullanici` (model) sınıfına `isim` ve `email` alanları eklendi (email için `unique=true`).
+- `/auth/register` endpoint'i `@Valid` ile doğrulama yapar; alan bazlı hata yanıtları döner; duplicate kullanıcı adı için 409 döndürülür.
+- `register.html` güncellendi: modern tasarım, inline doğrulamalar, şifre güç göstergesi ve şifre onayı eklendi.
+
+## Değiştirilen Dosyalar
+- [src/main/java/com/kutuphane/AkilliKutuphane/dto/RegisterRequest.java](src/main/java/com/kutuphane/AkilliKutuphane/dto/RegisterRequest.java)
+- [src/main/java/com/kutuphane/AkilliKutuphane/model/Kullanici.java](src/main/java/com/kutuphane/AkilliKutuphane/model/Kullanici.java)
+- [src/main/java/com/kutuphane/AkilliKutuphane/controller/AuthController.java](src/main/java/com/kutuphane/AkilliKutuphane/controller/AuthController.java)
+- [src/main/resources/static/register.html](src/main/resources/static/register.html)
+
+### Adım Adım Yapılanlar
+1. İnceleme: `AuthController`, `KullaniciService`, `RegisterRequest`, `Kullanici`, ve `register.html` incelendi; DTO ve frontend alan uyuşmazlıkları belirlendi.
+2. DTO genişletme: `RegisterRequest` içine `isim`, `email` eklendi ve Jakarta Validation anotasyonları (`@NotBlank`, `@Email`, `@Size`) kullanıldı.
+3. Model güncelleme: `Kullanici`'ya `isim` ve `email` eklendi; `email` için `unique=true` konuldu. (Not: mevcut veritabanı şemasına migration gerekebilir.)
+4. Controller güncelleme: `/auth/register` endpoint'i artık `@Valid` ile doğruluyor, `BindingResult` ile alan hatalarını JSON olarak döndürüyor, duplicate kullanıcı adı için 409 dönüyor ve kayıt sırasında isim/email kaydediliyor.
+5. Frontend güncelleme: Kayıt formuna `passwordConfirm`, parola güç göstergesi, inline hata alanları ve daha iyi yükleme/başarı/başarısızlık geri bildirimleri eklendi.
+
+## Bilinen Durumlar / Çözülmesi Gerekenler
+- Bu ortamda Maven build çalıştırılamadı: `JAVA_HOME` ortam değişkeni tanımlı değil. Bu nedenle ben tüm derleme hatalarını doğrudan çalıştırarak doğrulayamadım. Aşağıda nasıl derleyeceğinize dair adımlar var.
+- `Kullanici` modeline eklenen `email` için `unique=true` eklendi; mevcut veritabanında bu sütun yoksa migration (DDL) gerekiyor. Aksi takdirde uygulama çalışırken tablo/sütun bulunamaması veya constraint hatası alabilirsiniz.
+
+## Derleme ve Çalıştırma (Windows)
+1. Java 21 veya uyumlu JDK kurulu olduğundan emin olun ve `JAVA_HOME` ayarlayın.
+    PowerShell örneği:
+```powershell
+setx JAVA_HOME "C:\\Program Files\\Java\\jdk-21" -m
+# Yeni terminal açın
+```
+2. Proje kökünde (version4) Maven Wrapper ile derleyin. Geliştirme amacıyla MySQL kurulu değilse `dev` profili ile H2 in-memory veritabanı kullanabilirsiniz:
+```powershell
+cd "c:\\Users\\batma\\OneDrive - Karadeniz Teknik Üniversitesi\\Masaüstü\\ahsen\\version4"
+.\\mvnw.cmd clean package -DskipTests=true
+
+-- `dev` profili ile çalıştırma (H2 kullanılacak):
+
+```powershell
+.\\mvnw.cmd -Dspring-boot.run.profiles=dev spring-boot:run
+```
+```
+3. Uygulamayı çalıştırın:
+```powershell
+.\\mvnw.cmd spring-boot:run
 ```
 
-Uygulama `http://localhost:9090` adresinde çalışacaktır.
+## Veritabanı Migration (Hızlı SQL örneği)
+Eğer `kullanicilar` tablonuzda `isim` ve `email` alanları yoksa aşağıdaki SQL ile ekleyebilirsiniz (MySQL örneği):
 
-## 📂 Güncel Dosya Yapısı (Project Structure)
+```sql
+ALTER TABLE kullanicilar
+   ADD COLUMN isim VARCHAR(100),
+   ADD COLUMN email VARCHAR(255);
 
-Projenin backend ve frontend mimarisi aşağıdaki gibidir:
+-- Email için unique constraint ekleme (önce duplicate kayıtları temizleyin)
+ALTER TABLE kullanicilar
+   ADD CONSTRAINT uq_kullanici_email UNIQUE (email);
+```
 
-src/
-├── main/
-│   ├── java/com/kutuphane/AkilliKutuphane/
-│   │   ├── config/             # Security ve JWT yapılandırmaları
-│   │   ├── controller/         # REST API uç noktaları (Kitap, Yazar, Ödünç vb.)
-│   │   ├── dto/                # Veri transfer objeleri (BorrowRequest, KitapRequest vb.)
-│   │   ├── exception/          # Global hata yönetimi
-│   │   ├── model/              # Veritabanı varlıkları (Entity)
-│   │   ├── repository/         # Veritabanı erişim katmanı (JPA)
-│   │   └── service/            # İş mantığı (Business Logic)
-│   └── resources/
-│       ├── static/             # Frontend Dosyaları
-│       │   ├── authors.html    # Yazar yönetimi
-│       │   ├── books.html      # Kitap yönetimi (Mavi/Beyaz Tema)
-│       │   ├── borrows.html    # Ödünç takibi ve iade
-│       │   ├── dashboard.html  # Yönetim paneli
-│       │   ├── login.html      # Giriş ekranı
-│       │   ├── penalties.html  # Ceza yönetimi
-│       │   └── ...
-│       └── application.properties
+## API Test Örneği (curl)
+```bash
+curl -X POST http://localhost:9090/auth/register \
+   -H 'Content-Type: application/json' \
+   -d '{"isim":"Ahmet Deniz","kullaniciAdi":"ahmet","email":"ahmet@example.com","sifre":"P4ssw0rd","rol":"USER"}'
+```
+Başarılıysa `AuthResponse` (token, kullanıcı adı, rol) dönecektir. Hatalı isteklerde alan hataları JSON gövdesiyle dönecektir.
 
-
-## 📝 Notlar
-
-- Proje şu an geliştirme aşamasındadır. Aşağıdaki modüllerde bilinen hatalar mevcuttur ve düzeltilmesi planlanmaktadır:
-
-- Kullanıcı Kaydı (Register): Şu an sisteme sadece veritabanından eklenen kullanıcılar girebiliyor. "Kayıt Ol" ekranı ve backend bağlantısı henüz yapılmadı.
-
-- Öğrenci Paneli (User UI): Standart kullanıcı (Öğrenci) giriş yaptığında sadece kendi ödünç aldığı kitapları görebileceği "Kitaplarım" sayfası henüz aktif değil.
-
--  E-Posta Bildirimleri: Kitap iade tarihi yaklaştığında veya geciktiğinde otomatik e-posta gönderen (JavaMailSender) mekanizma henüz entegre edilmedi.
+## Sonraki Adımlar
+- Uçtan uca test: Build + run + kayıt testi ve hata inceleme.
+- E-posta doğrulama (activation link) eklenmesi.
+- Rate-limiting veya CAPTCHA ile bot koruması.
+- Eğer isterseniz Flyway/Liquibase migration script'leri hazırlayıp ekleyebilirim.
 
 
-4. **Güvenlik**
-   - JWT Authentication
-   - Rol tabanlı yetkilendirme
-   - Secure password hashing (BCrypt)
->>>>>>> 894054f2ec386db839c72290567606e2e9c5f809
+

@@ -1,6 +1,6 @@
 package com.kutuphane.AkilliKutuphane.controller;
 
-import com.kutuphane.AkilliKutuphane.Ceza;
+import com.kutuphane.AkilliKutuphane.model.Ceza;
 import com.kutuphane.AkilliKutuphane.service.CezaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,8 +1,8 @@
 package com.kutuphane.AkilliKutuphane.controller;
 
-import com.kutuphane.AkilliKutuphane.Kitap; 
 import com.kutuphane.AkilliKutuphane.dto.BorrowRequest;
 import com.kutuphane.AkilliKutuphane.dto.KitapRequest;
+import com.kutuphane.AkilliKutuphane.model.Kitap;
 import com.kutuphane.AkilliKutuphane.service.KitapService;
 import com.kutuphane.AkilliKutuphane.service.OduncIslemService;
 import org.springframework.http.HttpStatus;

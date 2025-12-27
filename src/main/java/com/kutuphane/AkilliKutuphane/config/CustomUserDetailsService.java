@@ -1,6 +1,6 @@
 package com.kutuphane.AkilliKutuphane.config;
 
-import com.kutuphane.AkilliKutuphane.Kullanici;
+import com.kutuphane.AkilliKutuphane.model.Kullanici;
 import com.kutuphane.AkilliKutuphane.repository.KullaniciRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

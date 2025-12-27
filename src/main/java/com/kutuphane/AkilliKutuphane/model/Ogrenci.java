@@ -1,4 +1,4 @@
-package com.kutuphane.AkilliKutuphane;
+package com.kutuphane.AkilliKutuphane.model;
 
 import jakarta.persistence.*; // JPA anotasyonları için gerekli
 import java.util.List; // Eğer daha sonra ödünç aldığı kitapları listelemek istersek

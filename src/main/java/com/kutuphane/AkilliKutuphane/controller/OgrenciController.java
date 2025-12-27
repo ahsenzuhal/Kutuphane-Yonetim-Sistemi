@@ -1,6 +1,6 @@
 package com.kutuphane.AkilliKutuphane.controller;
 
-import com.kutuphane.AkilliKutuphane.Ogrenci;
+import com.kutuphane.AkilliKutuphane.model.Ogrenci;
 import com.kutuphane.AkilliKutuphane.repository.OgrenciRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

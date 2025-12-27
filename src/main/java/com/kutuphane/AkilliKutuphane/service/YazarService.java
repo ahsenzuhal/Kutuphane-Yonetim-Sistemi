@@ -1,6 +1,6 @@
 package com.kutuphane.AkilliKutuphane.service;
 
-import com.kutuphane.AkilliKutuphane.Yazar;
+import com.kutuphane.AkilliKutuphane.model.Yazar;
 import com.kutuphane.AkilliKutuphane.repository.YazarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

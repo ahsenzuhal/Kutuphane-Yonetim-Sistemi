@@ -1,6 +1,11 @@
-package com.kutuphane.AkilliKutuphane;
+package com.kutuphane.AkilliKutuphane.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "kullanicilar")
@@ -20,11 +25,25 @@ public class Kullanici {
     @Column(name = "rol", nullable = false)
     private String rol; // "ADMIN", "KUTUPHANECI" gibi roller
 
+    @Column(name = "isim", nullable = true)
+    private String isim;
+
+    @Column(name = "email", nullable = true, unique = true)
+    private String email;
+
     // --- Constructor'lar ---
     public Kullanici() {
     }
 
     public Kullanici(String kullaniciAdi, String sifre, String rol) {
+        this.kullaniciAdi = kullaniciAdi;
+        this.sifre = sifre;
+        this.rol = rol;
+    }
+
+    public Kullanici(String isim, String email, String kullaniciAdi, String sifre, String rol) {
+        this.isim = isim;
+        this.email = email;
         this.kullaniciAdi = kullaniciAdi;
         this.sifre = sifre;
         this.rol = rol;
@@ -61,6 +80,22 @@ public class Kullanici {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public String getIsim() {
+        return isim;
+    }
+
+    public void setIsim(String isim) {
+        this.isim = isim;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.kutuphane.AkilliKutuphane.controller;
 
-import com.kutuphane.AkilliKutuphane.Yazar;
+import com.kutuphane.AkilliKutuphane.model.Yazar;
 import com.kutuphane.AkilliKutuphane.service.YazarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

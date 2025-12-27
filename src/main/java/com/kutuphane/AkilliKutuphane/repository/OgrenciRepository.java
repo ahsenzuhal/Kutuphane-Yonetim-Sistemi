@@ -1,8 +1,9 @@
 package com.kutuphane.AkilliKutuphane.repository;
 
-import com.kutuphane.AkilliKutuphane.Ogrenci;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.kutuphane.AkilliKutuphane.model.Ogrenci;
 
 @Repository // Bu sınıfın bir Repository bileşeni olduğunu Spring'e belirtir
 // JpaRepository< Hangi Entity?, Bu Entity'nin ID tipi >

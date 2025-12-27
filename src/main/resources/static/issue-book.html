@@ -6,116 +6,211 @@
     <title>Ödünç Verme - Akıllı Kütüphane</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --bg-light: #f8fafc;
-            --bg-white: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            /* Ana Renk Paleti - Deep Slate */
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-hover: rgba(51, 65, 85, 0.8);
+            
+            /* Metin */
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            
+            /* Vurgu */
+            --primary-accent: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            
+            /* Gölgeler */
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
         }
 
         body {
-            background-color: var(--bg-light);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
             color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
         }
 
-        .navbar-custom {
-            background-color: var(--bg-white);
-            border-bottom: 1px solid var(--border);
-            box-shadow: var(--shadow);
+        /* Navbar Dark Glass */
+        .navbar-glass {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
+        .btn-back {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            border-radius: 50px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-back:hover { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: var(--text-primary); 
+            transform: translateX(-3px);
+        }
+
+        /* Form Kartı */
         .form-card {
-            background-color: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
             margin-top: 2rem;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-hover);
         }
 
-        .form-control, .form-select {
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 0.625rem 0.875rem;
+        /* Input Alanları */
+        .form-control {
+            background-color: #0f172a;
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
         }
 
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-            outline: none;
+        .form-control:focus {
+            background-color: #0f172a;
+            color: white;
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+        }
+        
+        .form-control::placeholder { color: var(--text-secondary); opacity: 0.7; }
+
+        .form-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-
+        /* Dropdown (Seçim Listesi) */
         .select-container {
-            max-height: 200px;
+            max-height: 250px;
             overflow-y: auto;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background-color: var(--bg-white);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            background-color: #1e293b; /* Koyu arka plan */
             display: none;
-            box-shadow: var(--shadow-lg);
-            margin-top: 0.25rem;
+            box-shadow: var(--shadow-hover);
+            margin-top: 0.5rem;
+            position: absolute;
+            width: 100%;
+            z-index: 1050;
         }
 
-        .select-container.show {
-            display: block;
-        }
+        .select-container.show { display: block; }
 
         .select-option {
-            padding: 0.75rem;
+            padding: 0.85rem 1rem;
             cursor: pointer;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--glass-border);
             transition: background-color 0.15s;
+            color: var(--text-primary);
         }
+
+        .select-option:last-child { border-bottom: none; }
 
         .select-option:hover {
-            background-color: var(--bg-light);
+            background-color: rgba(59, 130, 246, 0.15); /* Mavi hover */
+        }
+        
+        .select-option strong { color: white; display: block; margin-bottom: 2px; }
+        .select-option small { color: var(--text-secondary); }
+
+        /* Buton */
+        .btn-gradient {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            transition: all 0.2s;
+        }
+        .btn-gradient:hover { 
+            opacity: 0.9; 
+            color: white; 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
         }
 
-        .select-option.selected {
-            background-color: rgba(37, 99, 235, 0.1);
+        /* Seçim Bilgisi */
+        .selection-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
         }
+
+        /* Animasyon */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up { opacity: 0; animation: fadeInUp 0.5s ease-out forwards; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-custom sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="/dashboard.html" style="font-weight: 600;">
-                <i class="bi bi-arrow-left-circle me-2"></i>Ana Sayfa
+    <nav class="navbar navbar-glass mb-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="/dashboard.html" class="btn-back">
+                <i class="bi bi-arrow-left"></i>
+                Ana Menü
             </a>
-            <span class="text-secondary">Ödünç Verme</span>
+            <div class="d-flex align-items-center gap-2 text-secondary">
+                <i class="bi bi-box-arrow-up-right"></i>
+                <span class="fw-medium">Ödünç Verme</span>
+            </div>
         </div>
     </nav>
 
     <div class="container py-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="form-card">
-                    <h2 class="mb-4 fw-bold">
-                        <i class="bi bi-book me-2 text-primary"></i>Kitap Ödünç Ver
-                    </h2>
+            <div class="col-md-8 col-lg-6">
+                
+                <div class="text-center mb-4 fade-in-up">
+                    <h2 class="fw-bold text-white">Kitap Çıkışı</h2>
+                    <p class="text-secondary">Öğrenciye kitap teslim etmek için formu doldurun.</p>
+                </div>
 
+                <div class="form-card fade-in-up" style="animation-delay: 0.1s;">
                     <form id="oduncForm">
-                        <div class="mb-4">
-                            <label class="form-label fw-500">Kitap Seçin</label>
+                        
+                        <div class="mb-4 position-relative">
+                            <label class="form-label"><i class="bi bi-book me-2"></i>KİTAP SEÇİN</label>
                             <div class="position-relative">
                                 <input 
                                     type="text" 
@@ -124,14 +219,15 @@
                                     placeholder="Kitap adı ile ara..."
                                     autocomplete="off"
                                 >
+                                <i class="bi bi-search position-absolute text-secondary" style="right: 1rem; top: 50%; transform: translateY(-50%);"></i>
                                 <div id="kitapDropdown" class="select-container"></div>
                             </div>
                             <input type="hidden" id="kitapId">
-                            <small id="kitapSecildi" class="text-secondary mt-2 d-none d-block"></small>
+                            <div id="kitapSecildi" class="mt-3 d-none"></div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label fw-500">Öğrenci Seçin</label>
+                        <div class="mb-5 position-relative">
+                            <label class="form-label"><i class="bi bi-person me-2"></i>ÖĞRENCİ SEÇİN</label>
                             <div class="position-relative">
                                 <input 
                                     type="text" 
@@ -140,19 +236,22 @@
                                     placeholder="Öğrenci adı veya email ile ara..."
                                     autocomplete="off"
                                 >
+                                <i class="bi bi-search position-absolute text-secondary" style="right: 1rem; top: 50%; transform: translateY(-50%);"></i>
                                 <div id="ogrenciDropdown" class="select-container"></div>
                             </div>
                             <input type="hidden" id="ogrenciId">
-                            <small id="ogrenciSecildi" class="text-secondary mt-2 d-none d-block"></small>
+                            <div id="ogrenciSecildi" class="mt-3 d-none"></div>
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="button" onclick="oduncVer()" class="btn btn-primary btn-lg">
-                                <i class="bi bi-check-circle me-2"></i>Ödünç Ver
+                            <button type="button" onclick="oduncVer()" class="btn btn-gradient btn-lg">
+                                <i class="bi bi-check-circle me-2"></i>Ödünç İşlemini Tamamla
                             </button>
                         </div>
+
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
@@ -162,57 +261,66 @@
     <script>
         let TUM_KITAPLAR = [];
         let TUM_OGRENCILER = [];
-        let secilenKitap = null;
-        let secilenOgrenci = null;
 
         document.addEventListener("DOMContentLoaded", () => {
-            if (typeof checkAuth === 'undefined' || !checkAuth()) {
-                console.error("checkAuth fonksiyonu bulunamadı veya yetkilendirme başarısız");
-                return;
-            }
+            if (typeof checkAuth !== 'undefined' && !checkAuth()) { return; }
             
             const role = localStorage.getItem("role");
             if (role !== "ADMIN" && role !== "ROLE_ADMIN") {
-                showMessage("Bu sayfaya erişim yetkiniz yok", "error");
-                setTimeout(() => window.location.href = "/dashboard.html", 2000);
+                window.location.href = "/dashboard.html";
                 return;
             }
 
             kitaplariGetir();
             ogrencileriGetir();
 
+            setupSearchListeners();
+        });
+
+        function setupSearchListeners() {
+            // Kitap Arama
             document.getElementById("kitapArama").addEventListener("input", (e) => {
                 filtreleKitap(e.target.value);
             });
 
+            // Öğrenci Arama
             document.getElementById("ogrenciArama").addEventListener("input", (e) => {
                 filtreleOgrenci(e.target.value);
             });
 
+            // Dışarı tıklayınca kapanma
             document.addEventListener("click", (e) => {
                 if (!e.target.closest(".position-relative")) {
                     document.getElementById("kitapDropdown").classList.remove("show");
                     document.getElementById("ogrenciDropdown").classList.remove("show");
                 }
             });
-        });
+        }
+
+        async function apiCall(url, options = {}) {
+            const token = localStorage.getItem("token");
+            const defaultHeaders = {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            };
+            options.headers = { ...defaultHeaders, ...options.headers };
+            
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || "API Hatası");
+            }
+            return response.json();
+        }
 
         async function kitaplariGetir() {
-            try {
-                TUM_KITAPLAR = await apiCall("/api/kitaplar");
-            } catch (err) {
-                console.error("Kitaplar yüklenemedi:", err);
-                showMessage("Kitaplar yüklenemedi", "error");
-            }
+            try { TUM_KITAPLAR = await apiCall("/api/kitaplar"); } 
+            catch (err) { console.error("Kitaplar yüklenemedi", err); }
         }
 
         async function ogrencileriGetir() {
-            try {
-                TUM_OGRENCILER = await apiCall("/api/ogrenciler");
-            } catch (err) {
-                console.error("Öğrenciler yüklenemedi:", err);
-                showMessage("Öğrenciler yüklenemedi", "error");
-            }
+            try { TUM_OGRENCILER = await apiCall("/api/ogrenciler"); } 
+            catch (err) { console.error("Öğrenciler yüklenemedi", err); }
         }
 
         function filtreleKitap(arama) {
@@ -224,11 +332,12 @@
                 return;
             }
 
+            // Sadece Raftaki kitaplar
             const filtrelenmis = TUM_KITAPLAR.filter(kitap => {
                 const ad = (kitap.kitapAdi || "").toLowerCase();
-                const yazar = kitap.yazar ? (kitap.yazar.adSoyad || kitap.yazar.isim || "").toLowerCase() : "";
-                return ad.includes(aramaLower) || yazar.includes(aramaLower);
-            }).filter(k => k.durum === "Rafta").slice(0, 10);
+                const yazar = kitap.yazar ? (kitap.yazar.adSoyad || "").toLowerCase() : "";
+                return (ad.includes(aramaLower) || yazar.includes(aramaLower)) && kitap.durum === "Rafta";
+            }).slice(0, 10);
 
             if (filtrelenmis.length === 0) {
                 dropdown.classList.remove("show");
@@ -237,15 +346,12 @@
 
             dropdown.innerHTML = "";
             filtrelenmis.forEach(kitap => {
-                const yazarAdi = kitap.yazar ? (kitap.yazar.adSoyad || kitap.yazar.isim) : "Yazar Bilinmiyor";
-                const option = document.createElement("div");
-                option.className = "select-option";
-                option.innerHTML = `
-                    <strong>${kitap.kitapAdi}</strong><br>
-                    <small class="text-secondary">${yazarAdi}</small>
-                `;
-                option.onclick = () => kitapSec(kitap);
-                dropdown.appendChild(option);
+                const yazarAdi = kitap.yazar ? kitap.yazar.adSoyad : "Yazar Bilinmiyor";
+                const div = document.createElement("div");
+                div.className = "select-option";
+                div.innerHTML = `<strong>${kitap.kitapAdi}</strong><small>${yazarAdi}</small>`;
+                div.onclick = () => kitapSec(kitap);
+                dropdown.appendChild(div);
             });
 
             dropdown.classList.add("show");
@@ -273,36 +379,35 @@
 
             dropdown.innerHTML = "";
             filtrelenmis.forEach(ogr => {
-                const option = document.createElement("div");
-                option.className = "select-option";
-                option.innerHTML = `
-                    <strong>${ogr.isim}</strong><br>
-                    <small class="text-secondary">${ogr.email}</small>
-                `;
-                option.onclick = () => ogrenciSec(ogr);
-                dropdown.appendChild(option);
+                const div = document.createElement("div");
+                div.className = "select-option";
+                div.innerHTML = `<strong>${ogr.isim}</strong><small>${ogr.email}</small>`;
+                div.onclick = () => ogrenciSec(ogr);
+                dropdown.appendChild(div);
             });
 
             dropdown.classList.add("show");
         }
 
         function kitapSec(kitap) {
-            secilenKitap = kitap;
             document.getElementById("kitapId").value = kitap.id;
-            document.getElementById("kitapArama").value = kitap.kitapAdi;
+            document.getElementById("kitapArama").value = ""; // Inputu temizle veya kitap adını yaz
             document.getElementById("kitapDropdown").classList.remove("show");
-            const yazarAdi = kitap.yazar ? (kitap.yazar.adSoyad || kitap.yazar.isim) : "Yazar Bilinmiyor";
-            document.getElementById("kitapSecildi").textContent = `Seçilen: ${kitap.kitapAdi} - ${yazarAdi}`;
-            document.getElementById("kitapSecildi").classList.remove("d-none");
+            
+            const el = document.getElementById("kitapSecildi");
+            const yazarAdi = kitap.yazar ? kitap.yazar.adSoyad : "";
+            el.innerHTML = `<div class="selection-badge"><i class="bi bi-check2"></i> ${kitap.kitapAdi} <span class="opacity-75 ms-1">(${yazarAdi})</span></div>`;
+            el.classList.remove("d-none");
         }
 
         function ogrenciSec(ogrenci) {
-            secilenOgrenci = ogrenci;
             document.getElementById("ogrenciId").value = ogrenci.id;
-            document.getElementById("ogrenciArama").value = ogrenci.isim;
+            document.getElementById("ogrenciArama").value = "";
             document.getElementById("ogrenciDropdown").classList.remove("show");
-            document.getElementById("ogrenciSecildi").textContent = `Seçilen: ${ogrenci.isim} (${ogrenci.email})`;
-            document.getElementById("ogrenciSecildi").classList.remove("d-none");
+            
+            const el = document.getElementById("ogrenciSecildi");
+            el.innerHTML = `<div class="selection-badge"><i class="bi bi-check2"></i> ${ogrenci.isim} <span class="opacity-75 ms-1">(${ogrenci.email})</span></div>`;
+            el.classList.remove("d-none");
         }
 
         async function oduncVer() {
@@ -310,7 +415,7 @@
             const ogrenciId = document.getElementById("ogrenciId").value;
 
             if (!kitapId || !ogrenciId) {
-                showMessage("Lütfen kitap ve öğrenci seçin", "error");
+                alert("Lütfen önce kitap ve öğrenci seçimi yapın.");
                 return;
             }
 
@@ -323,20 +428,19 @@
                     })
                 });
 
-                showMessage("Kitap başarıyla ödünç verildi", "success");
+                alert("İşlem Başarılı! Kitap ödünç verildi.");
                 
+                // Formu sıfırla
                 document.getElementById("oduncForm").reset();
                 document.getElementById("kitapId").value = "";
                 document.getElementById("ogrenciId").value = "";
                 document.getElementById("kitapSecildi").classList.add("d-none");
                 document.getElementById("ogrenciSecildi").classList.add("d-none");
-                secilenKitap = null;
-                secilenOgrenci = null;
-
+                
+                // Listeleri güncelle
                 kitaplariGetir();
             } catch (err) {
-                const errorMsg = err.message || "Bir hata oluştu";
-                showMessage("Hata: " + errorMsg, "error");
+                alert("Hata: " + err.message);
             }
         }
     </script>

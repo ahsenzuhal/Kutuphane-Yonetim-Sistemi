@@ -59,6 +59,7 @@ public class SecurityConfig {
                 "/penalties.html",
                 "/issue-book.html",
                 "/my-books.html",
+                "/register.html",
                 "/",
                 "/index.html",
                 "/global.js",     // Global JavaScript dosyası

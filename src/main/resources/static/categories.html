@@ -6,123 +6,249 @@
     <title>Kategori Yönetimi - Akıllı Kütüphane</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --bg-light: #f8fafc;
-            --bg-white: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            /* Ana Renk Paleti - Deep Slate */
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-hover: rgba(51, 65, 85, 0.8);
+            
+            /* Metin */
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            
+            /* Vurgu (Turkuaz - Mavi Gradient) */
+            --accent-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            --accent-color: #06b6d4;
+            
+            /* Gölgeler */
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
         }
 
         body {
-            background-color: var(--bg-light);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
             color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
         }
 
-        .navbar-custom {
-            background-color: var(--bg-white);
-            border-bottom: 1px solid var(--border);
-            box-shadow: var(--shadow);
+        /* Navbar Dark Glass */
+        .navbar-glass {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .category-card {
-            background-color: var(--bg-white);
-            border: 1px solid var(--border);
-            border-left: 3px solid var(--primary);
-            border-radius: 12px;
-            padding: 1.5rem;
+        .btn-back {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            border-radius: 50px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             transition: all 0.2s;
+        }
+        .btn-back:hover { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: var(--text-primary); 
+            transform: translateX(-3px);
+        }
+
+        /* Kategori Kartı */
+        .category-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
             height: 100%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
         }
 
         .category-card:hover {
-            transform: translateX(3px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-8px);
+            background: var(--glass-hover);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: var(--shadow-hover);
         }
 
+        .icon-box {
+            width: 64px;
+            height: 64px;
+            background: var(--accent-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 20px -5px rgba(6, 182, 212, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover .icon-box {
+            transform: scale(1.1);
+        }
+
+        .category-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Aksiyon Butonları */
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .category-card:hover .card-actions {
+            opacity: 1;
+        }
+
+        .btn-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            color: white;
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        .btn-action.delete:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+
+        /* Modal Dark */
         .modal-content {
-            background-color: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            background: #1e293b;
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
         }
-
-        .modal-header {
-            border-bottom: 1px solid var(--border);
-        }
-
+        .modal-header, .modal-footer { border-color: var(--glass-border); }
+        
         .form-control {
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            background-color: #0f172a;
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
         }
-
         .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background-color: #0f172a;
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(6, 182, 212, 0.25);
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
+        .btn-gradient {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
         }
+        .btn-gradient:hover { opacity: 0.9; color: white; }
 
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
+        /* Animasyon */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        .fade-in-up { opacity: 0; animation: fadeInUp 0.5s ease-out forwards; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-custom sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="/dashboard.html" style="font-weight: 600;">
-                <i class="bi bi-arrow-left-circle me-2"></i>Ana Sayfa
+    <nav class="navbar navbar-glass mb-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="/dashboard.html" class="btn-back">
+                <i class="bi bi-arrow-left"></i>
+                Ana Menü
             </a>
-            <span class="text-secondary">Kategori Yönetimi</span>
+            <div class="d-flex align-items-center gap-2 text-secondary">
+                <i class="bi bi-tags-fill"></i>
+                <span class="fw-medium">Kategori Yönetimi</span>
+            </div>
         </div>
     </nav>
 
-    <div class="container py-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="container pb-5">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 fade-in-up">
             <div>
-                <h2 class="fw-bold mb-1">Kategoriler</h2>
-                <p class="text-secondary mb-0">Toplam: <span id="toplamSayi">0</span></p>
+                <h2 class="fw-bold mb-1 text-white">Kategoriler</h2>
+                <p class="text-secondary mb-0">Toplam Kategori: <span id="toplamSayi" class="text-white fw-bold">0</span></p>
             </div>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kategoriEkleModal">
-                <i class="bi bi-plus-circle-fill me-2"></i>Yeni Kategori
+            <button class="btn btn-gradient mt-3 mt-md-0" data-bs-toggle="modal" data-bs-target="#kategoriEkleModal" onclick="yeniKategoriModal()">
+                <i class="bi bi-plus-lg me-2"></i>Yeni Kategori
             </button>
         </div>
 
-        <div id="kategori-listesi" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div id="yukleniyorMesaji" class="text-center w-100 mt-5">
+            <div class="spinner-border text-info" role="status"></div>
+            <p class="mt-3 text-secondary">Kategoriler yükleniyor...</p>
         </div>
+
+        <div id="kategori-listesi" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            </div>
     </div>
 
     <div class="modal fade" id="kategoriEkleModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalBaslik">Yeni Kategori</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title fw-bold" id="modalBaslik">Yeni Kategori</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     <form id="kategoriForm">
                         <input type="hidden" id="kategoriId">
                         <div class="mb-3">
-                            <label class="form-label">Kategori Adı</label>
-                            <input type="text" id="kategoriAd" class="form-control" required>
+                            <label class="form-label text-secondary small fw-bold">KATEGORİ ADI</label>
+                            <input type="text" id="kategoriAd" class="form-control form-control-lg" required placeholder="Örn: Bilim Kurgu">
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button onclick="kategoriKaydet()" class="btn btn-primary" id="btnKaydet">Kaydet</button>
+                <div class="modal-footer border-0 pt-0 px-4 pb-4">
+                    <button type="button" class="btn btn-outline-secondary border-0" data-bs-dismiss="modal">İptal</button>
+                    <button onclick="kategoriKaydet()" class="btn btn-gradient px-4" id="btnKaydet">Kaydet</button>
                 </div>
             </div>
         </div>
@@ -134,50 +260,61 @@
         const API_URL = "/api/kategoriler";
 
         document.addEventListener("DOMContentLoaded", () => {
-            if (typeof checkAuth === 'undefined' || !checkAuth()) {
-                console.error("checkAuth fonksiyonu bulunamadı veya yetkilendirme başarısız");
-                return;
-            }
+            if (typeof checkAuth !== 'undefined' && !checkAuth()) { return; }
             kategorileriGetir();
-            document.getElementById("kategoriEkleModal").addEventListener("show.bs.modal", () => {
-                yeniKategoriModal();
-            });
         });
+
+        async function apiCall(url, options = {}) {
+            const token = localStorage.getItem("token");
+            const defaultHeaders = {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            };
+            options.headers = { ...defaultHeaders, ...options.headers };
+            
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || "API Hatası");
+            }
+            if (options.method === "DELETE") return null;
+            return response.json();
+        }
 
         async function kategorileriGetir() {
             try {
                 const kategoriler = await apiCall(API_URL);
-                if (!kategoriler || !Array.isArray(kategoriler)) {
-                    throw new Error("Geçersiz veri formatı");
-                }
-                document.getElementById("toplamSayi").textContent = kategoriler.length;
+                
+                document.getElementById("yukleniyorMesaji").style.display = "none";
+                document.getElementById("toplamSayi").textContent = kategoriler ? kategoriler.length : 0;
+                
                 const grid = document.getElementById("kategori-listesi");
                 grid.innerHTML = "";
 
-                if (kategoriler.length === 0) {
+                if (!kategoriler || kategoriler.length === 0) {
                     grid.innerHTML = `<div class="col-12 text-center py-5 text-secondary">Kayıtlı kategori bulunamadı.</div>`;
                     return;
                 }
 
-                kategoriler.forEach(kat => {
+                kategoriler.forEach((kat, index) => {
+                    const delay = 0.1 + (index * 0.05);
+
                     const html = `
-                    <div class="col">
+                    <div class="col fade-in-up" style="animation-delay: ${delay}s">
                         <div class="category-card">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5 class="mb-0">
-                                        <i class="bi bi-tag-fill me-2 text-primary"></i>
-                                        ${kat.kategoriAdi || "İsimsiz"}
-                                    </h5>
-                                </div>
-                                <div>
-                                    <button onclick="kategoriDuzenle(${kat.id})" class="btn btn-sm btn-outline-primary me-1" title="Düzenle">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button onclick="kategoriSil(${kat.id})" class="btn btn-sm btn-outline-danger" title="Sil">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
+                            <div class="icon-box">
+                                <i class="bi bi-bookmarks-fill"></i>
+                            </div>
+                            
+                            <h5 class="category-title">${kat.kategoriAdi || "İsimsiz"}</h5>
+                            
+                            <div class="card-actions">
+                                <button onclick="kategoriDuzenle(${kat.id})" class="btn-action" title="Düzenle">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </button>
+                                <button onclick="kategoriSil(${kat.id})" class="btn-action delete" title="Sil">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
                             </div>
                         </div>
                     </div>`;
@@ -185,7 +322,7 @@
                 });
             } catch (err) {
                 console.error(err);
-                showMessage("Kategoriler yüklenemedi", "error");
+                document.getElementById("yukleniyorMesaji").innerHTML = `<div class="text-danger">Kategoriler yüklenemedi.</div>`;
             }
         }
 
@@ -196,8 +333,11 @@
             document.getElementById("btnKaydet").textContent = "Kaydet";
         }
 
-        function kategoriDuzenle(id) {
-            apiCall(`${API_URL}`).then(kategoriler => {
+        async function kategoriDuzenle(id) {
+            try {
+                // Listeyi tekrar çekmek yerine API'den bulabiliriz, veya mevcut DOM'dan.
+                // Güvenli olsun diye fetch yapıyoruz.
+                const kategoriler = await apiCall(API_URL);
                 const kat = kategoriler.find(k => k.id === id);
                 if (!kat) return;
 
@@ -207,48 +347,39 @@
                 document.getElementById("btnKaydet").textContent = "Güncelle";
 
                 new bootstrap.Modal(document.getElementById('kategoriEkleModal')).show();
-            });
+            } catch (err) { console.error(err); }
         }
 
         async function kategoriKaydet() {
             const id = document.getElementById("kategoriId").value;
-            const veri = {
-                kategoriAdi: document.getElementById("kategoriAd").value
-            };
+            const veri = { kategoriAdi: document.getElementById("kategoriAd").value };
 
             try {
                 if (id) {
-                    await apiCall(`${API_URL}/${id}`, {
-                        method: "PUT",
+                    await apiCall(`${API_URL}/${id}`, { // veya sadece API_URL (method PUT)
+                        method: "PUT", // Controller @PutMapping ise
                         body: JSON.stringify(veri)
                     });
-                    showMessage("Kategori güncellendi", "success");
                 } else {
                     await apiCall(API_URL, {
                         method: "POST",
                         body: JSON.stringify(veri)
                     });
-                    showMessage("Kategori eklendi", "success");
                 }
+                
                 bootstrap.Modal.getInstance(document.getElementById('kategoriEkleModal')).hide();
                 kategorileriGetir();
             } catch (err) {
-                showMessage("Hata: " + (err.message || "Bir hata oluştu"), "error");
+                alert("İşlem başarısız: " + err.message);
             }
         }
 
         async function kategoriSil(id) {
             if (!confirm("Bu kategoriyi silmek istediğinize emin misiniz?")) return;
-
             try {
-                await apiCall(`${API_URL}/${id}`, {
-                    method: "DELETE"
-                });
-                showMessage("Kategori silindi", "success");
+                await apiCall(`${API_URL}/${id}`, { method: "DELETE" });
                 kategorileriGetir();
-            } catch (err) {
-                showMessage("Hata: " + (err.message || "Bir hata oluştu"), "error");
-            }
+            } catch (err) { alert("Silinemedi: " + err.message); }
         }
     </script>
 </body>

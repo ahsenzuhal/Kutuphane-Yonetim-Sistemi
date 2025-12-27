@@ -1,4 +1,4 @@
-package com.kutuphane.AkilliKutuphane;
+package com.kutuphane.AkilliKutuphane.model;
 
 import jakarta.persistence.*;
 

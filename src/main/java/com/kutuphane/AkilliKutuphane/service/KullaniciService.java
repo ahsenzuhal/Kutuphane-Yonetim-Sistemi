@@ -1,6 +1,6 @@
 package com.kutuphane.AkilliKutuphane.service;
 
-import com.kutuphane.AkilliKutuphane.Kullanici;
+import com.kutuphane.AkilliKutuphane.model.Kullanici;
 import com.kutuphane.AkilliKutuphane.repository.KullaniciRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,8 +1,8 @@
 package com.kutuphane.AkilliKutuphane.controller;
 
-import com.kutuphane.AkilliKutuphane.OduncIslem;
 import com.kutuphane.AkilliKutuphane.dto.BorrowRequest;
 import com.kutuphane.AkilliKutuphane.dto.OduncIslemResponseDTO;
+import com.kutuphane.AkilliKutuphane.model.OduncIslem;
 import com.kutuphane.AkilliKutuphane.service.OduncIslemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

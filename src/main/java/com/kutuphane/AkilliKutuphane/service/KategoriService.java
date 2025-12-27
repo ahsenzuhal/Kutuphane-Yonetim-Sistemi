@@ -1,6 +1,6 @@
 package com.kutuphane.AkilliKutuphane.service;
 
-import com.kutuphane.AkilliKutuphane.Kategori;
+import com.kutuphane.AkilliKutuphane.model.Kategori;
 import com.kutuphane.AkilliKutuphane.repository.KategoriRepository;
 import org.springframework.stereotype.Service;
 

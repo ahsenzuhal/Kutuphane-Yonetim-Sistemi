@@ -1,6 +1,6 @@
 package com.kutuphane.AkilliKutuphane.controller;
 
-import com.kutuphane.AkilliKutuphane.Kategori;
+import com.kutuphane.AkilliKutuphane.model.Kategori;
 import com.kutuphane.AkilliKutuphane.service.KategoriService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

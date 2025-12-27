@@ -1,4 +1,4 @@
-package com.kutuphane.AkilliKutuphane;
+package com.kutuphane.AkilliKutuphane.model;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
