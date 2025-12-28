@@ -2,7 +2,7 @@
 
 Spring Boot backend ve Vanilla JavaScript frontend ile geliştirilmiş, uçtan uca çalışan bir dijital kütüphane yönetim platformudur.
 
-<img width="1915" height="948" alt="Kütüphane Sistemi Önizleme" src="https://github.com/user-attachments/assets/e5303276-8323-4e2a-98a6-1440e67e7b46" />
+<img width="1564" height="909" alt="image" src="https://github.com/user-attachments/assets/81c4c96a-cb55-4432-b5c2-66466602f8f1" />
 
 ## İçindekiler
 - [Özellikler](#özellikler)
@@ -73,13 +73,17 @@ AkilliKutuphane/
 ## Uygulama Görselleri
 
 # Giriş Sayfası 
-(Buraya login.html sayfasının ekran görüntüsünü ekleyin)
-
-## Kullanıcı Kitap Listesi 
-(Buraya ödünç alınan kitapların listelendiği my-books.html görüntüsünü ekleyin)
-
-## Kitap Arşivi ve Ödünç Alma 
-(Buraya tüm kitapların kartlar şeklinde göründüğü books.html görüntüsünü ekleyin)
+<img width="1516" height="892" alt="image" src="https://github.com/user-attachments/assets/28f1986a-1773-48e8-898a-ff65caa127f2" />
 
 ## Admin Aktif İşlemler Takibi 
-(Buraya admin panelindeki aktif ödünç takip tablosunu ekleyin)
+<img width="1772" height="881" alt="image" src="https://github.com/user-attachments/assets/db0d33cd-2e13-48f3-ba9d-5f105c63205b" />
+
+## Kitap Arşivi ve Ödünç Alma 
+<img width="1664" height="915" alt="image" src="https://github.com/user-attachments/assets/73b95989-4ebc-4c39-a0d4-e597ca9e5b77" />
+
+## Kayıt Ol
+<img width="1146" height="852" alt="image" src="https://github.com/user-attachments/assets/92ba3a9a-326d-4f89-af59-c91945fbf1a8" />
+
+## Cezalar
+<img width="1581" height="908" alt="image" src="https://github.com/user-attachments/assets/cbf77687-7baf-4a6a-90a0-b4ed7d39b735" />
+
