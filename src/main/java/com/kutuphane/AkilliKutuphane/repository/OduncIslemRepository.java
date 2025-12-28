@@ -1,38 +1,20 @@
 package com.kutuphane.AkilliKutuphane.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.kutuphane.AkilliKutuphane.model.OduncIslem;
-
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Ödünç işlemleri için Repository
- */
-@Repository
 public interface OduncIslemRepository extends JpaRepository<OduncIslem, Long> {
     
-    /**
-     * Belirli bir öğrencinin aktif ödünç işlemlerini getirir
-     */
-    List<OduncIslem> findByOgrenciIdAndDurum(Integer ogrenciId, String durum);
-    
-    /**
-     * Belirli bir kitabın aktif ödünç işlemini getirir
-     */
+    @Query("SELECT o FROM OduncIslem o JOIN FETCH o.kitap JOIN FETCH o.ogrenci WHERE o.ogrenci.id = :ogrenciId")
+    List<OduncIslem> findByOgrenciId(@Param("ogrenciId") Integer ogrenciId);
+
+    // ADMIN Paneli için: Tüm aktif işlemleri detaylarıyla (Kitap/Öğrenci) getirir
+    @Query("SELECT o FROM OduncIslem o JOIN FETCH o.kitap JOIN FETCH o.ogrenci WHERE o.durum = :durum")
+    List<OduncIslem> findByDurumWithDetails(@Param("durum") String durum);
+
     Optional<OduncIslem> findByKitapIdAndDurum(Long kitapId, String durum);
-    
-    /**
-     * Tüm aktif ödünç işlemlerini getirir
-     */
-    List<OduncIslem> findByDurum(String durum);
-    
-    /**
-     * Belirli bir öğrencinin tüm ödünç işlemlerini getirir (geçmiş dahil)
-     */
-    List<OduncIslem> findByOgrenciIdOrderByAlisTarihiDesc(Integer ogrenciId);
 }
-
-

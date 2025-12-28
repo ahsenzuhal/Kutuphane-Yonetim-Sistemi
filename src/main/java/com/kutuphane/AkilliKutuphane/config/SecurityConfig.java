@@ -41,43 +41,33 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf(csrf -> csrf.disable())
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
+            // 1. Herkesin erişebileceği sayfalar ve giriş işlemleri
             .requestMatchers(
-                "/auth/**",       // Giriş ve Kayıt API'leri
-                "/login.html",    // <--- ARTIK HERKES GİREBİLİR
-                "/books.html",    // <--- HTML YÜKLENSİN (Veriyi token ile çekeceğiz)
-                "/dashboard.html",
-                "/students.html",
-                "/authors.html",
-                "/categories.html",
-                "/borrows.html",
-                "/penalties.html",
-                "/issue-book.html",
-                "/my-books.html",
-                "/register.html",
-                "/",
-                "/index.html",
-                "/global.js",     // Global JavaScript dosyası
-                "/css/**",
-                "/js/**",
-                "/images/**",
-                "/*.html",        // Tüm HTML dosyaları
-                "/*.js",          // Tüm JS dosyaları
-                "/*.css"          // Tüm CSS dosyaları
-            ).permitAll() // Bu sayfalara şifresiz girilebilir
-            .anyRequest().authenticated() // Diğer her yer (özellikle API'ler) şifreli
+                "/auth/**", 
+                "/login.html", "/register.html", "/index.html", "/",
+                "/*.html", "/*.js", "/*.css", "/global.js",
+                "/css/**", "/js/**", "/images/**"
+            ).permitAll() 
+
+            // 2. API Güvenliği: Ödünç alma işlemleri için giriş yapmış olmak şart
+            // (Burada ADMIN/USER ayrımını Controller içindeki @PreAuthorize ile yapacağız)
+            .requestMatchers("/api/odunc-islemler/**").authenticated() 
+            .requestMatchers("/api/ogrenciler/**").authenticated()
+
+            // 3. Diğer tüm API talepleri şifreli/tokenlı olmalı
+            .anyRequest().authenticated() 
         )
-        // Hata yönetimi (Giriş yapılmamışsa 401 döndürsün, login sayfasına yönlendirmesin)
         .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint)); 
 
     http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();
-    }
+}
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

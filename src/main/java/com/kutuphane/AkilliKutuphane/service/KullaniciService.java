@@ -1,40 +1,46 @@
 package com.kutuphane.AkilliKutuphane.service;
 
 import com.kutuphane.AkilliKutuphane.model.Kullanici;
+import com.kutuphane.AkilliKutuphane.model.Ogrenci;
 import com.kutuphane.AkilliKutuphane.repository.KullaniciRepository;
+import com.kutuphane.AkilliKutuphane.repository.OgrenciRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service // Bu sınıfın bir "Service" bileşeni olduğunu belirtir
+@Service
 public class KullaniciService {
 
     private final KullaniciRepository kullaniciRepository;
     private final PasswordEncoder passwordEncoder;
+    private final OgrenciRepository ogrenciRepository;
 
     @Autowired
-    public KullaniciService(KullaniciRepository kullaniciRepository, PasswordEncoder passwordEncoder) {
+    public KullaniciService(KullaniciRepository kullaniciRepository, 
+                            PasswordEncoder passwordEncoder, 
+                            OgrenciRepository ogrenciRepository) {
         this.kullaniciRepository = kullaniciRepository;
         this.passwordEncoder = passwordEncoder;
+        this.ogrenciRepository = ogrenciRepository;
     }
 
-    /**
-     * Yeni bir kullanıcıyı kaydederken şifresini şifreler.
-     * @param kullanici Kaydedilecek Kullanici nesnesi (düz metin şifre ile)
-     * @return Kaydedilen Kullanici nesnesi (şifrelenmiş şifre ile)
-     */
+    @Transactional // Veritabanı tutarlılığı için eklendi
     public Kullanici kullaniciKaydet(Kullanici kullanici) {
-        // 1. Kullanıcının düz metin şifresini al
-        String duzMetinSifre = kullanici.getSifre();
+        // Şifreleme işlemi
+        kullanici.setSifre(passwordEncoder.encode(kullanici.getSifre()));
+        Kullanici kaydedilen = kullaniciRepository.save(kullanici);
+
+        //  öğrenci oluşturulan yer:
+    if ("USER".equalsIgnoreCase(kaydedilen.getRol())) {
+        Ogrenci yeniOgrenci = new Ogrenci();
+        yeniOgrenci.setIsim(kaydedilen.getIsim()); 
+        yeniOgrenci.setEmail(kaydedilen.getEmail());
+        yeniOgrenci.setKullaniciAdi(kaydedilen.getKullaniciAdi());
+        ogrenciRepository.save(yeniOgrenci);
+    }   
         
-        // 2. Şifreyi BCrypt ile şifrele
-        String sifrelenmisSifre = passwordEncoder.encode(duzMetinSifre);
-        
-        // 3. Kullanıcının şifresini şifrelenmiş olanla güncelle
-        kullanici.setSifre(sifrelenmisSifre);
-        
-        // 4. Veritabanına kaydet
-        return kullaniciRepository.save(kullanici);
+        return kaydedilen;
     }
     
     public boolean kullaniciVarMi(String kullaniciAdi) {

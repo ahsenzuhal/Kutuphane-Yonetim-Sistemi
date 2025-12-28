@@ -206,73 +206,105 @@
             ogrenciIdyiBul();
         });
 
-        async function ogrenciIdyiBul() {
-            try {
-                const username = localStorage.getItem("username");
-                const ogrenciler = await apiCall("/api/ogrenciler");
-                
-                const ogrenci = ogrenciler.find(o => 
-                    o.email === username || o.email.toLowerCase() === username?.toLowerCase()
-                );
-
-                if (ogrenci) {
-                    ogrenciId = ogrenci.id;
-                    kitaplariGetir();
-                } else {
-                    renderEmptyState("Öğrenci kaydı bulunamadı.");
-                }
-            } catch (err) {
-                console.error(err);
-                showMessage("Öğrenci bilgisi alınamadı", "error");
-            }
+    async function ogrenciIdyiBul() {
+    try {
+        // localStorage'daki anahtarın 'username' olduğundan ve değerin 'berranurr' olduğundan emin ol
+        const currentUsername = localStorage.getItem("username"); 
+        
+        if (!currentUsername) {
+            console.error("Giriş yapmış kullanıcı bulunamadı!");
+            return;
         }
 
-        // --- my-books.html İÇİNDEKİ SCRIPT GÜNCELLEMESİ ---
+        const ogrenciler = await apiCall("/api/ogrenciler");
+        console.log("Backend'den gelen öğrenciler:", ogrenciler);
+
+        // Ekran görüntüne (image_0d4dc7) göre 'kullaniciAdi' alanıyla eşleştiriyoruz
+        const ogrenci = ogrenciler.find(o => 
+            o.kullaniciAdi && o.kullaniciAdi.toLowerCase() === currentUsername.toLowerCase()
+        );
+
+        if (ogrenci) {
+            ogrenciId = ogrenci.id; 
+            console.log("Öğrenci Başarıyla Eşleşti! ID:", ogrenciId);
+            
+            // Eğer my-books sayfasındaysak listeyi yükle
+            if (typeof kitaplariGetir === 'function') {
+                kitaplariGetir();
+            }
+        } else {
+            console.warn("Eşleşme Sağlanamadı! Aranan:", currentUsername);
+            renderEmptyState(`'${currentUsername}' kullanıcı adıyla eşleşen bir öğrenci kaydı bulunamadı.`);
+        }
+    } catch (err) {
+        console.error("Öğrenci bulma işleminde hata:", err);
+    }
+}
 
 async function kitaplariGetir() {
     if (!ogrenciId) return;
 
     try {
+        // Backend'den bu öğrenciye ait ödünç işlemlerini çekiyoruz
         const islemler = await apiCall(`/api/odunc-islemler/ogrenci/${ogrenciId}`);
         
-        // ... (üstteki kodlar aynı kalabilir) ...
+        // Üst paneldeki toplam sayı güncellemesi
         document.getElementById("toplamSayi").textContent = islemler ? islemler.length : 0;
+        
         const container = document.getElementById("kitap-listesi");
         container.innerHTML = "";
 
-        // ... (boş kontrolü aynı) ...
+        // Eğer ödünç alınan kitap yoksa boş durum mesajı göster
+        if (!islemler || islemler.length === 0) {
+            renderEmptyState("Henüz ödünç aldığınız bir kitap bulunmuyor.");
+            return;
+        }
 
         islemler.forEach((islem, index) => {
-            // ... (tarih hesaplamaları aynı) ...
+            const delay = index * 0.1;
+            const planlananTarih = new Date(islem.planlananIadeTarihi);
             const bugun = new Date();
-            const iadeTarihi = new Date(islem.planlananIadeTarihi);
-            // ...
+            
+            let durumHTML = "";
+            let buttonHTML = "";
 
-            // HTML KISMINI BURAYLA DEĞİŞTİR:
+            // DURUM MANTIĞI: Veritabanından gelen 'İade Edildi' durumunu kontrol ediyoruz
+            if (islem.durum === 'İade Edildi') {
+                durumHTML = `<span class="status-pill status-success">İade Edildi</span>`;
+                buttonHTML = `<span class="text-muted small"><i class="bi bi-check-circle-fill me-1"></i>Tamamlandı</span>`;
+            } else {
+                // Kitap hala öğrencideyse (Ödünçte veya Gecikmiş)
+                const gecikmeVar = bugun > planlananTarih;
+                durumHTML = gecikmeVar 
+                    ? `<span class="status-pill status-danger">Gecikmiş</span>` 
+                    : `<span class="status-pill status-warning">Ödünçte</span>`;
+                
+                buttonHTML = `
+                    <button onclick="kitapIadeEt(${islem.kitapId})" class="btn btn-sm btn-outline-danger rounded-pill">
+                        <i class="bi bi-arrow-return-left me-1"></i>İade Et
+                    </button>`;
+            }
+
+            // Kartın HTML Yapısı
             const html = `
             <div class="book-card fade-in-up" style="animation-delay: ${delay}s">
                 <div class="d-flex align-items-center gap-3">
                     <div class="book-icon">
                         <i class="bi bi-book"></i>
                     </div>
-                    
                     <div class="flex-grow-1">
-                        <h5 class="fw-bold mb-1 text-white">${islem.kitapAdi || "İsimsiz Kitap"}</h5>
-                        <div class="d-flex flex-wrap gap-2 mt-2">
-                            <div class="date-info" title="Son Teslim">
-                                <i class="bi bi-calendar-x"></i> 
-                                Teslim: ${iadeTarihi.toLocaleDateString('tr-TR')}
-                            </div>
+                        <h5 class="fw-bold mb-1 text-dark">${islem.kitapAdi || "İsimsiz Kitap"}</h5>
+                        <div class="date-info">
+                            <i class="bi bi-calendar-check"></i> 
+                            ${islem.durum === 'İade Edildi' 
+                                ? 'İade Tarihi: ' + new Date(islem.gercekIadeTarihi).toLocaleDateString('tr-TR') 
+                                : 'Teslim: ' + planlananTarih.toLocaleDateString('tr-TR')}
                         </div>
                     </div>
-
                     <div class="text-end">
                         ${durumHTML}
-                        
                         <div class="mt-2">
-                            <button onclick="kitapIadeEt(${islem.kitapId})" class="btn btn-sm btn-outline-danger rounded-pill border-opacity-25" style="font-size: 0.75rem;">
-                                <i class="bi bi-arrow-return-left me-1"></i>İade Et
-                            </button>
+                            ${buttonHTML}
                         </div>
                     </div>
                 </div>
@@ -281,20 +313,22 @@ async function kitaplariGetir() {
             container.innerHTML += html;
         });
     } catch (err) {
-        console.error(err);
+        console.error("Kitaplar listelenirken hata oluştu:", err);
+        renderEmptyState("Kitaplar yüklenemedi.");
     }
 }
 
-// Scriptin EN SONUNA (kapanan script etiketinden hemen önce) bunu ekle:
 async function kitapIadeEt(kitapId) {
     if(!confirm("Bu kitabı iade etmek istediğinize emin misiniz?")) return;
     
     try {
-        // Backend endpointin burası olmalı
-        await apiCall(`/api/odunc-islemler/iade/${kitapId}`, { method: "POST" });
+        // URL düzeltildi: Önce ID, sonra /iade
+        await apiCall(`/api/odunc-islemler/${kitapId}/iade`, { method: "POST" });
+        
         alert("Kitap başarıyla iade edildi.");
         kitaplariGetir(); // Listeyi yenile
     } catch (err) {
+        // Eğer 403 hatası alırsak, backend'deki role yetkisini kontrol ediyoruz
         alert("İade işlemi başarısız: " + err.message);
     }
 }

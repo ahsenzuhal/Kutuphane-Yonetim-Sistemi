@@ -27,15 +27,20 @@ public class Ogrenci {
     @Column(name = "sinif")
     private String sinif;
 
+    @Column(name = "kullanici_adi") 
+    private String kullaniciAdi; 
+
+
     // --- Constructor'lar ---
     public Ogrenci() {
     }
 
-    public Ogrenci(String isim, String email, String bolum, String sinif) {
+    public Ogrenci(String isim, String email, String bolum, String sinif, String kullaniciAdi) {
         this.isim = isim;
         this.email = email;
         this.bolum = bolum;
         this.sinif = sinif;
+        this.kullaniciAdi = kullaniciAdi;
     }
 
     // --- Getter ve Setter Metotları ---
@@ -79,14 +84,23 @@ public class Ogrenci {
         this.sinif = sinif;
     }
 
-    @Override
-    public String toString() {
-        return "Ogrenci{" +
-               "id=" + id +
-               ", isim='" + isim + '\'' +
-               ", email='" + email + '\'' +
-               ", bolum='" + bolum + '\'' +
-               ", sinif='" + sinif + '\'' +
-               '}';
+    public String getKullaniciAdi() {
+        return kullaniciAdi;
     }
+
+    public void setKullaniciAdi(String kullaniciAdi) {
+        this.kullaniciAdi = kullaniciAdi;
+    }
+
+    @Override
+public String toString() {
+    return "Ogrenci{" +
+           "id=" + id +
+           ", isim='" + isim + '\'' +
+           ", kullaniciAdi='" + kullaniciAdi + '\'' +
+           ", email='" + email + '\'' +
+           ", bolum='" + bolum + '\'' +
+           ", sinif='" + sinif + '\'' +
+           '}';
+}
 }
